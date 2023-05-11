@@ -75,3 +75,45 @@ Financial Companies - localhost:8082
 
 Admin - localhost:8083
 - `/investments/:id` get an investment record by id
+
+### Stephy's submissions
+
+#### New route:
+```
+POST http://localhost:8083/investments/export
+```
+
+###### Expected response:
+```
+User,First Name,Last Name,Date,Holding,Value
+1,Billy,Bob,2020-01-01,The Small Investment Company,1400
+2,Sheila,Aussie,2020-01-01,"The Big Investment Company, The Small Investment Company",20000
+1,Billy,Bob,2020-02-01,The Small Investment Company,1300
+2,Sheila,Aussie,2020-02-01,"The Big Investment Company, The Small Investment Company",22000
+1,Billy,Bob,2020-03-01,The Small Investment Company,12000
+2,Sheila,Aussie,2020-03-01,"The Big Investment Company, The Small Investment Company, Capital Investments",21500
+3,John,Smith,2020-03-01,"The Big Investment Company, Capital Investments",150000
+```
+
+#### Running tests:
+```
+npm test
+```
+
+#### How might you make this service more secure?
+Use JWT to protect the route. Also check the access privileges of the user specified in JWT.
+
+#### How would you make this solution scale to millions of records?
+<ol start="1">
+  <li>Construct a background worker</li>
+  <li>Fetch a small amount of entries (e.g. 1000)</li>
+  <li>Pipe the output and write to a file write stream</li>
+  <li>The temporary output file can be stored in AWS S3</li>
+  <li>Therefore, when user calls the API endpoint to export the report, they can download the report once it is ready. Relevant progress management can be introduced.</li>
+</ol>
+
+#### What else would you have liked to improve given more time?
+* Introduce a generic handler to intercept the HTTP response, in order to format the response body more efficiently and thus centralize the exception handling.
+* To handle file upload as multipart/form-data.
+* Batch processing on investment entries.
+* Separating route definitions & controller actions from `src/index.js`.
