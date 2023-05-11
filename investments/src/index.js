@@ -19,8 +19,12 @@ app.get("/investments/:id", (req, res) => {
 })
 
 app.post("/investments/export", (req, res) => {
-  console.log("Body received", req.body)
-  res.sendStatus(204)
+  res.attachment("investments");
+  res.set('Content-Type', 'application/octet-stream');
+  res.send(req.body.investments);
+
+  // console.log("Body received", req.body)
+  // res.sendStatus(204)
 })
 
 app.listen(config.port, (err) => {
